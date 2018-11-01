@@ -1,18 +1,23 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 
 import Menu from './components/Menu';
-import { WEEK } from './constants/constants';
+import { MENU_OPTIONS } from './constants/constants';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Menu data={WEEK}/>
-      </div>
-    );
+const App = () => {
+  const onSelect = (values) => {
+    console.log(values);
   }
+
+  return (
+    <div className="App">
+      <Menu
+        data={MENU_OPTIONS}
+        labelField='value'
+        onSelect={onSelect}
+      />
+    </div>
+  );
 }
 
 export default App;

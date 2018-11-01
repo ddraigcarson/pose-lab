@@ -1,65 +1,56 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import posed from 'react-pose';
+import posed, { PoseGroup } from 'react-pose';
+import * as _ from 'lodash';
 
 import Item from './Item';
-import { DROP_STATES } from '../constants/constants';
 
-const AnimatedMenu = posed.div({
-  open: {
-    delayChildren: 300,
-    staggerChildren: 50,
-  },
-  closing: {
-    delayChildren: 300,
-    staggerChildren: 50,
-    staggerDirection: -1,
-  },
-});
-
-const StyledMenu = styled(AnimatedMenu)`
+const StyledMenu = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   overflow-y: scroll;
 `;
 
 const AnimatedItem = posed(Item)({
-  open: { opacity: 1 },
-  closing: { opacity: 0 },
-  closed: { opacity: 0 },
+  enter: {
+    opacity: 1,
+    delay: 300,
+  },
+  exit: {
+    opacity: 0,
+  },
 });
 
 const Menu = (props) => {
-  const { data } = props;
-  const [ dropState, setDropState ] = useState(DROP_STATES.CLOSED);
-  const [ selectedItem, setSelectedItem ] = useState({label: 'Select'});
+  const { data, labelField, onSelect } = props;
+  const [ displayData, setDisplayData ] = useState(data);
+  const [ selectionTree, setSelectionTree ] = useState([]);
 
-  const toggleOpen = () => {
-    setDropState(dropState === DROP_STATES.OPEN ? DROP_STATES.CLOSING : DROP_STATES.OPEN);
-  }
-
-  const toggleClosed = () => {
-    if (dropState === DROP_STATES.CLOSING) {
-      setDropState(DROP_STATES.CLOSED);
+  const selectItem = (item) => {
+    if (!_.isEmpty(item.children)) {
+      setDisplayData(item.children);
+      setSelectionTree(_.concat([], selectionTree, item));
+    } else {
+      onSelect(_.concat([], selectionTree, item))
     }
   }
 
-  const selectItem = (item) => {
-    setSelectedItem(item);
-    setDropState(DROP_STATES.CLOSING);
+  const goBack = () => {
+    setDisplayData(data);
+    setSelectionTree([]);
   }
 
   return (
-    <StyledMenu pose={dropState} initialPose={DROP_STATES.CLOSING} onPoseComplete={toggleClosed}>
-      <Item item={selectedItem} selected={true} onItemClick={toggleOpen} />
+    <StyledMenu>
+      <PoseGroup animateOnMount>
+      <AnimatedItem selected key="back" item={{[labelField]: 'Back'}} labelField={labelField} onItemClick={goBack}/>
       {
-        dropState !== DROP_STATES.CLOSED
-        ? data.map(o => <AnimatedItem key={o.label} item={o} onItemClick={selectItem}/>)
-        : null
+        displayData.map(o => <AnimatedItem key={o.id} item={o} labelField={labelField} onItemClick={selectItem}/>)
       }
+      </PoseGroup>
     </StyledMenu>
   );
 }
