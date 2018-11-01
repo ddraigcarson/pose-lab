@@ -18,19 +18,19 @@ export const WEEK = [
   MONDAY, TUESDAY, WEDNESDAY, THURDAY, FRIDAY, SATURDAY, SUNDAY,
 ];
 
-const createOption = (id, value, children) => ({
-  id, value, children,
+const createOption = (id, label, value, children) => ({
+  id, label, value, children,
 })
 
-const FILE = createOption('FILE', 'file', []);
-const LIBRARY = createOption('LIBRARY', 'library', []);
-const DEFAULT = createOption('DEFAULT', 'default', [LIBRARY, FILE]);
-const LIST = createOption('LIST', 'list', [LIBRARY, FILE]);
-const IMPORT = createOption('IMPORT', 'import', [DEFAULT, LIST])
+const FILE = createOption('FILE', 'file', '\'\';', []);
+const LIBRARY = createOption('LIBRARY', 'library', '\'\';', []);
+const DEFAULT = createOption('DEFAULT', 'default', ' from', [LIBRARY, FILE]);
+const LIST = createOption('LIST', 'list', '{  } from', [LIBRARY, FILE]);
+const IMPORT = createOption('IMPORT', 'import', 'import', [DEFAULT, LIST])
 
-const USE_STATE = createOption('USE_STATE', 'useState', []);
-const USE_EFFECT = createOption('USE_EFFECT', 'useEffect', []);
-const HOOK = createOption('HOOK', 'hook', [USE_STATE, USE_EFFECT]);
+const USE_STATE = createOption('USE_STATE', 'useState', 'const [] = useState();', []);
+const USE_EFFECT = createOption('USE_EFFECT', 'useEffect', 'useEffect(()=>{});', []);
+const HOOK = createOption('HOOK', 'hook', undefined, [USE_STATE, USE_EFFECT]);
 
 export const MENU_OPTIONS = [
   IMPORT,

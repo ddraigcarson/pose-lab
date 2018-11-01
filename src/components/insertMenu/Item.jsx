@@ -6,6 +6,9 @@ const StyledItem = styled.div`
   padding: 20px;
   border-radius: 15px;
 
+  display: flex;
+  justify-content: center;
+
   background-color: ${(props) => props.selected ? 'skyblue' : '#ffcc99'};
   font-family: "Courier New";
   font-size: 24px;

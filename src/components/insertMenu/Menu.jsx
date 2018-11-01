@@ -7,11 +7,12 @@ import Item from './Item';
 
 const StyledMenu = styled.div`
   height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const AnimatedItem = posed(Item)({
@@ -34,7 +35,9 @@ const Menu = (props) => {
       setDisplayData(item.children);
       setSelectionTree(_.concat([], selectionTree, item));
     } else {
-      onSelect(_.concat([], selectionTree, item))
+      onSelect(_.concat([], selectionTree, item));
+      setDisplayData(data);
+      setSelectionTree([]);
     }
   }
 
