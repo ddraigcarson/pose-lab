@@ -1,32 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as _ from 'lodash';
 import styled from 'styled-components';
 
+import { subscribeToTimer } from '../../api';
 import { MENU_OPTIONS } from '../../constants/constants';
+import { backgroundColours } from '../../styles/constants';
 import { replaceAt, insertAt } from '../../utility/array';
 import { ruleToCode } from '../../utility/rules';
 
 import Menu from '../insertMenu/Menu';
+import LineNumbers from './LineNumbers';
 import Line from './Line';
+import WebSocket from '../websocket/WebSocket';
 
 const StyledEditor = styled.div`
-  background-color: #282C34;
+  ${backgroundColours.page}
   height: 100%;
   padding: 10px 20px 20px 20px;
-
   display: flex;
-`;
-
-const LineNumbers = styled.div`
-  display: flex;
-  flex-direction: column;
-  color: #4B5364;
-  font-family: "Courier New";
-  font-size: 15px;
-`;
-
-const LineNumber = styled.div`
-  padding: 4px 0px 2px 0px;
 `;
 
 const Lines = styled.div`
@@ -37,10 +28,11 @@ const Lines = styled.div`
 `;
 
 const Editor = (props) => {
-  const [ lines, setLines ] = useState([{value: ''}]);
-  const [ focusedLine, setFocusedLine ] = useState(0);
+  const [ lines, setLines ] = useState([{value: 'g'}]);
+  const [ focusedLine, setFocusedLine ] = useState(2);
 
-  const onSelect = (values) => {
+  const autoGenerateCode = (values) => {
+    console.log(focusedLine)
     setLines(insertAt(lines, [{ value: ruleToCode(values) }], focusedLine-1));
     setFocusedLine(focusedLine);
   }
@@ -58,14 +50,13 @@ const Editor = (props) => {
 
   return (
     <StyledEditor>
+      <WebSocket onChange={autoGenerateCode}/>
       <Menu
         data={MENU_OPTIONS}
         labelField='label'
-        onSelect={onSelect}
+        onSelect={autoGenerateCode}
       />
-      <LineNumbers>
-        {_.map(lines, (o, i) => <LineNumber key={i}>{i}</LineNumber>)}
-      </LineNumbers>
+      <LineNumbers lines={lines}/>
       <Lines>
         {_.map(lines, (o, i) => (
           <Line

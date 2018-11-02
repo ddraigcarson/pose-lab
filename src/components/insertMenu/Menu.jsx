@@ -49,7 +49,7 @@ const Menu = (props) => {
   return (
     <StyledMenu>
       <PoseGroup animateOnMount>
-      <AnimatedItem selected key="back" item={{[labelField]: 'Back'}} labelField={labelField} onItemClick={goBack}/>
+      <AnimatedItem selected key="back" item={{[labelField]: 'Home'}} labelField={labelField} onItemClick={goBack}/>
       {
         displayData.map(o => <AnimatedItem key={o.id} item={o} labelField={labelField} onItemClick={selectItem}/>)
       }

@@ -8,6 +8,7 @@
     "react-dom": "^16.7.0-alpha.0",
     "react-pose": "^3.3.7",
     "react-scripts": "2.0.5",
+    "socket.io": "^2.1.1",
     "styled-components": "^4.0.2"
   },
   "scripts": {

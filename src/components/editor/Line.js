@@ -44,7 +44,7 @@ const Line = (props) => {
       focused={focused}
       onChange={onChange}
       onKeyDown={onKeyDown}
-      onClick={onClick}
+      onMouseDown={onClick}
       />
   )
 
